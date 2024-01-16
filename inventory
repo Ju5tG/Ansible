@@ -1,9 +1,17 @@
 [web_servers]
-192.168.1.72 
-[file_servers]
 192.168.1.72
-192.168.1.100 
+192.168.1.100
+192.168.1.99
+192.168.1.75 ansible_python_interpreter=/usr/bin/python3 
+[file_servers]
+192.168.1.63 ansible_python_interpreter=/usr/bin/python
+192.168.1.100
+192.168.1.99
+192.168.1.72
+192.168.1.75  
 [db_servers]
+192.168.1.72
 192.168.1.99
 192.168.1.100
+192.168.1.75
 
