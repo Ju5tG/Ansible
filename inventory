@@ -1,19 +1,19 @@
 [web_servers]
-192.168.1.72
-192.168.1.100
-192.168.1.99
-192.168.1.75 ansible_python_interpreter=/usr/bin/python3
-192.168.1.244 
+192.168.1.99 become_method=sudo apache_package=apache2 php_package=libapache2-mod-php
+192.168.1.129 become_method=su apache_package=httpd php_package=php
+192.168.1.244 become_method=su apache_package=apache2 php_package=libapache2-mod-php
+
 [file_servers]
-192.168.1.63 ansible_python_interpreter=/usr/bin/python
-192.168.1.100
-192.168.1.99
-192.168.1.72
-192.168.1.75 
-192.168.1.244 
+192.168.1.240 become_method=su
+
 [db_servers]
-192.168.1.72
-192.168.1.99
-192.168.1.100
-192.168.1.75
-192.168.1.244
+192.168.1.100 become_method=sudo maria_package=mariadb-server
+192.168.1.129 become_method=su
+
+#[windows_servers]
+#192.168.1.185
+
+#[dev_servers]
+#192.168.1.244 become_method=su
+
+
