@@ -1,0 +1,50 @@
+---
+
+- hosts: all
+  become: true
+  become_method: "{{ become_method }}"
+  tasks:
+
+    - name: Remove qemu-guest-agent and unzip
+      tags: always, CentOS, Debian, Ubuntu, qemu, unzip
+      package:
+        name:
+          - qemu-guest-agent
+          - unzip
+        state: absent
+  
+- hosts: web_servers
+  become: true
+  become_method: "{{ become_method }}"
+  tasks:
+  
+  - name: remove apache and php on all web servers
+    tags: httpd,apache2, php, libapache2-mod-php
+    package:
+      name:
+          - "{{ apache_package }}"
+          - "{{ php_package }}"
+      state: absent
+    
+
+- hosts: db_servers
+  become: true
+  become_method: "{{ become_method }}"
+  tasks:
+
+    - name: remove mariadb package
+      tags: mariadb, mariadb-server
+      package:
+        name: mariadb-server
+        state: absent
+    
+- hosts: file_servers
+  become: true
+  become_method: "{{ become_method }}"
+  tasks:
+
+    - name: remove samba package
+      tags: samba
+      package:
+        name: samba
+        state: absent
