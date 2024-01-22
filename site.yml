@@ -19,13 +19,34 @@
         update_cache: yes
     when: ansible_distribution == "CentOS"
   
-  - name: Install qemu-guest-agent and unzip
-    tags: always, CentOS, Debian, Ubuntu, qemu, unzip
+  - name: Install qemu-guest-agent, unzip, and sudo
+    tags: always, CentOS, Debian, Ubuntu, qemu, unzip, sudo
     package:
         name:
           - qemu-guest-agent
           - unzip
+          - sudo
         state: latest
+  
+  - name: create justin user
+    tags: always
+    user:
+      name: justin
+      groups: root
+  
+  - name: add ssh key for justin
+    tags: alwasy
+    authorized_key:
+      user: justin
+      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMrm+7enWdPz3LQlVW96B+0M1FL8DMsU9E/iF/s4CpB9 ansible"
+  
+  - name: add sudoers file for justin
+    tags: always
+    copy:
+      src: sudoer_justin
+      dest: /etc/sudoers.d/justin
+      owner: root
+      group: root
   
 - hosts: web_servers
   become: true
@@ -39,6 +60,14 @@
           - "{{ apache_package }}"
           - "{{ php_package }}"
       state: latest
+  - name: start httpd (CentOS)
+    tags: apache, httpd, CentOS
+    service: 
+      name: httpd
+      state: started
+      enabled: yes
+    when: ansible_distribution == "CentOS" 
+
   - name: copy default html file for site
     tags: apache, apache2, httpd
     copy:
