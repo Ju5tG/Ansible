@@ -1,0 +1,14 @@
+$credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $testUserAccountName, $testUserAccountPassword
+
+## Find the cert thumbprint for the client certificate created on the Ansible host
+$ansibleCert = Get-ChildItem -Path 'Cert:\LocalMachine\Root' | Where-Object {$_.Subject -eq 'CN=ansibletestuser'}
+
+$params = @{
+	Path = 'WSMan:\localhost\ClientCertificate'
+	Subject = "$testUserAccountName@localhost"
+	URI = '*'
+	Issuer = $ansibleCert.Thumbprint
+  Credential = $credential
+	Force = $true
+}
+New-Item @params
